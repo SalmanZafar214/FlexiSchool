@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flexi.Domain", "Flexi.Domain\Flexi.Domain.csproj", "{AC3D0DE4-5841-47C3-BAF1-92A3FD08CE15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flexi.Api", "Flexi.Api\Flexi.Api.csproj", "{80B89EFA-376F-4E21-A0C0-FBB1424CC9AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flexi.Application", "Flexi.Application\Flexi.Application.csproj", "{99B7597A-6B3E-4D49-98DB-02A53517175E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flexi.Infrastructure", "Flexi.Infrastructure\Flexi.Infrastructure.csproj", "{31066EAC-BE8A-40D8-BD90-56E1052DB416}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{20573E6C-EA7A-44B8-B204-0CB4E623069F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flexi.Domain.Core", "Flexi.Domain.Core\Flexi.Domain.Core.csproj", "{1B57D837-7ED3-4A8B-95B4-E170B5022A20}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC3D0DE4-5841-47C3-BAF1-92A3FD08CE15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC3D0DE4-5841-47C3-BAF1-92A3FD08CE15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC3D0DE4-5841-47C3-BAF1-92A3FD08CE15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC3D0DE4-5841-47C3-BAF1-92A3FD08CE15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80B89EFA-376F-4E21-A0C0-FBB1424CC9AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80B89EFA-376F-4E21-A0C0-FBB1424CC9AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80B89EFA-376F-4E21-A0C0-FBB1424CC9AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80B89EFA-376F-4E21-A0C0-FBB1424CC9AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99B7597A-6B3E-4D49-98DB-02A53517175E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99B7597A-6B3E-4D49-98DB-02A53517175E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99B7597A-6B3E-4D49-98DB-02A53517175E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99B7597A-6B3E-4D49-98DB-02A53517175E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31066EAC-BE8A-40D8-BD90-56E1052DB416}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31066EAC-BE8A-40D8-BD90-56E1052DB416}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31066EAC-BE8A-40D8-BD90-56E1052DB416}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31066EAC-BE8A-40D8-BD90-56E1052DB416}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B57D837-7ED3-4A8B-95B4-E170B5022A20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B57D837-7ED3-4A8B-95B4-E170B5022A20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B57D837-7ED3-4A8B-95B4-E170B5022A20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B57D837-7ED3-4A8B-95B4-E170B5022A20}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1B57D837-7ED3-4A8B-95B4-E170B5022A20} = {20573E6C-EA7A-44B8-B204-0CB4E623069F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E29DB8AE-B13A-41F4-B229-D6353B55100A}
+	EndGlobalSection
+EndGlobal
