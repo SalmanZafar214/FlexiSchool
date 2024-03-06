@@ -1,10 +1,5 @@
 ﻿using Flexi.Domain.Core.Events;
 using Flexi.Domain.SubjectAggregate;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Flexi.Domain.SubjectAggregate.Events;
 using Microsoft.Extensions.Logging;
 

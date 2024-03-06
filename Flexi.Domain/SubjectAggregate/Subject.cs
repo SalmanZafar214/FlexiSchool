@@ -11,15 +11,21 @@ public class Subject : AggregateRoot<SubjectId>
 {
     public string Name { get; private set; }
 
-    public List<Lecture>? Lectures { get; private set; }
+    public List<Lecture> Lectures { get; private set; }
 
     public List<Student> StudentsEnrolled { get; set; }
 
-    private Subject(SubjectId id, string name, List<Lecture>? lectures, UserId createdBy, DateTime createdOn, UserId modifiedBy, DateTime modifiedOn)
+    private Subject(SubjectId id,
+        string name,
+        List<Lecture>? lectures,
+        UserId createdBy,
+        DateTime createdOn,
+        UserId modifiedBy,
+        DateTime modifiedOn)
         : base(id, createdBy, createdOn, modifiedBy, modifiedOn)
     {
         Name = name;
-        Lectures = lectures;
+        Lectures = lectures ?? new List<Lecture>();
 
         AddEvent(new SubjectCreated(id, name));
     }
@@ -40,15 +46,14 @@ public class Subject : AggregateRoot<SubjectId>
 
     public void AddLecture(Lecture lecture)
     {
-        Lectures ??= new List<Lecture>();
-        Lectures?.Add(lecture);
+        Lectures.Add(lecture);
 
         AddEvent(new LectureAddedToSubject(lecture.Id, Name, Id));
     }
 
     public void RemoveLecture(Lecture lecture)
     {
-        if (Lectures != null && Lectures.Any())
+        if (Lectures.Any())
         {
             Lectures.Remove(lecture);
         }

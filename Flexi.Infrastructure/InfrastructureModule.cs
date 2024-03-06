@@ -7,6 +7,7 @@ using Flexi.Domain.SubjectAggregate;
 using Flexi.Domain.SubjectAggregate.ValueObjects;
 using Flexi.Infrastructure.LectureTheaters;
 using Flexi.Infrastructure.Mongo;
+using Flexi.Infrastructure.Students;
 using Flexi.Infrastructure.Subjects;
 using Flexi.Infrastructure.Subjects.EventManager;
 using Microsoft.Extensions.Configuration;
@@ -60,7 +61,7 @@ public static class InfrastructureModule
         BsonSerializer.RegisterSerializer(new UserIdSerializer());
         BsonSerializer.RegisterSerializer(new DayOfWeekSerializer());
         BsonSerializer.RegisterSerializer(new LectureIdSerializer());
-        BsonSerializer.RegisterSerializer(new SubjectIdSerializer());
+        BsonSerializer.RegisterSerializer(new StudentIdSerializer());
     }
 
     private static void RegisterRepositories(IServiceCollection services)
