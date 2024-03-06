@@ -1,4 +1,5 @@
 ﻿using Flexi.Domain.Core.Aggregate;
+using Flexi.Domain.Core.Exceptions;
 using Flexi.Domain.Core.Guard;
 using Flexi.Domain.Core.ValueObjects;
 using Flexi.Domain.StudentAggregate;
@@ -46,6 +47,15 @@ public class Subject : AggregateRoot<SubjectId>
 
     public void AddLecture(Lecture lecture)
     {
+        var lectureAlreadyExitsOnSameDay = Lectures.Exists(l => l.DayOfWeek.Equals(lecture.DayOfWeek)
+                                                                && l.TheaterId.Equals(lecture.TheaterId));
+
+        if (lectureAlreadyExitsOnSameDay)
+        {
+            throw new AlreadyExistsException(lecture.DayOfWeek.ToString(), nameof(Subject), $"Lecture already exists on Same day");
+        }
+
+
         Lectures.Add(lecture);
 
         AddEvent(new LectureAddedToSubject(lecture.Id, Name, Id));
