@@ -12,12 +12,9 @@ public class LectureTheater : AggregateRoot<LectureTheaterId>
 
     public int Capacity { get; private set; }
 
-    public List<Lecture>? Lectures { get; private set; }
-
     private LectureTheater(LectureTheaterId id,
         string name,
         int capacity,
-        List<Lecture>? lectures,
         UserId createdBy,
         DateTime createdOn,
         UserId modifiedBy,
@@ -26,17 +23,15 @@ public class LectureTheater : AggregateRoot<LectureTheaterId>
     {
         Name = name;
         Capacity = capacity;
-        Lectures = lectures;
     }
 
-    public static LectureTheater Make(string name, int capacity, List<Lecture>? lectures, UserId createdBy, UserId modifiedBy)
+    public static LectureTheater Make(string name, int capacity, UserId createdBy, UserId modifiedBy)
     {
         Require.NotNullOrEmpty(name);
 
         return new LectureTheater(LectureTheaterId.MakeNew(),
             name,
             capacity,
-            lectures ?? new List<Lecture>(),
             createdBy,
             DateTime.Now,
             modifiedBy,

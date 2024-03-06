@@ -13,10 +13,13 @@ namespace Flexi.Application.LectureTheaters;
 public record CreateLectureTheaterRequest
 {
     [FromBody]
-    public CreateLectureTheaterRequestBody Body { get; init; } = default!;
-}
+    [Required]
+    public string Name { get; init; } = default!;
 
-public record CreateLectureTheaterRequestBody([Required] string Name, [Required] int Capacity);
+    [FromBody]
+    [Required]
+    public int Capacity { get; init; } = default!;
+}
 
 [Route(Endpoints.LectureTheater)]
 public class Create : EndpointBaseAsync
@@ -43,7 +46,7 @@ public class Create : EndpointBaseAsync
     public override async Task<ActionResult<CreateLectureTheaterResponse>> HandleAsync(CreateLectureTheaterRequest request,
         CancellationToken cancellationToken = new())
     {
-        var name = request.Body.Name.Trim();
+        var name = request.Name.Trim();
         var performedBy = UserId.Make();
 
         var existingLectureTheater = await lectureTheaterRepository.GetByName(name, cancellationToken);
@@ -53,7 +56,7 @@ public class Create : EndpointBaseAsync
             return BadRequest($"Lecture Theater '{name} already exists");
         }
 
-        var lectureTheater = LectureTheater.Make(name, request.Body.Capacity, null, performedBy, performedBy);
+        var lectureTheater = LectureTheater.Make(name, request.Capacity, performedBy, performedBy);
 
         await lectureTheaterRepository.Upsert(lectureTheater, cancellationToken);
 

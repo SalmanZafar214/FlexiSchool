@@ -13,7 +13,7 @@ public class Student : AggregateRoot<StudentId>
 
     public Email Email { get; private set; }
 
-    public List<Subject>? Subjects { get; private set; }
+    public List<Subject> Subjects { get; private set; }
 
     private Student(StudentId id,
         string name,
@@ -25,6 +25,7 @@ public class Student : AggregateRoot<StudentId>
         : base(id, createdBy, createdOn, modifiedBy, modifiedOn)
     {
         Name = name;
+        Subjects = new List<Subject>();
         Email = email;
     }
 
@@ -51,7 +52,6 @@ public class Student : AggregateRoot<StudentId>
             throw new InvalidOperationException("Student cannot enroll in subject, exceeds weekly lecture hours limit.");
         }
 
-        Subjects ??= new List<Subject>();
         Subjects.Add(subject);
 
         AddEvent(new StudentEnrolledInSubject(Id, Name, subject.Id, subject.Name));
