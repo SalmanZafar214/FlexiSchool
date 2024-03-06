@@ -1,10 +1,8 @@
 ﻿using Flexi.Application.Students.Repository;
 using Flexi.Domain.Core.Events;
+using Flexi.Domain.Core.ValueObjects;
 using Flexi.Domain.StudentAggregate;
 using Flexi.Domain.StudentAggregate.ValueObjects;
-using Flexi.Domain.SubjectAggregate;
-using Flexi.Domain.SubjectAggregate.ValueObjects;
-using Flexi.Infrastructure.Subjects.EventManager;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -27,6 +25,15 @@ internal class StudentRepository : IStudentRepository
     public async Task<Student> GetById(StudentId studentId, CancellationToken cancellationToken)
     {
         var filter = Builders<Student>.Filter.Eq(p => p.Id, studentId);
+
+        return await studentCollection
+            .Find(filter)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<Student?> GetByEmail(Email email, CancellationToken cancellationToken)
+    {
+        var filter = Builders<Student>.Filter.Eq(p => p.Email, email);
 
         return await studentCollection
             .Find(filter)

@@ -11,21 +11,32 @@ public class Student : AggregateRoot<StudentId>
 {
     public string Name { get; private set; }
 
+    public Email Email { get; private set; }
+
     public List<Subject>? Subjects { get; private set; }
 
-    private Student(StudentId id, string name, UserId createdBy, DateTime createdOn, UserId modifiedBy, DateTime modifiedOn)
+    private Student(StudentId id,
+        string name,
+        Email email,
+        UserId createdBy,
+        DateTime createdOn,
+        UserId modifiedBy,
+        DateTime modifiedOn)
         : base(id, createdBy, createdOn, modifiedBy, modifiedOn)
     {
         Name = name;
+        Email = email;
     }
 
-    public static Student Make(string name, UserId createdBy, UserId modifiedBy)
+    public static Student Make(string name, string email, UserId createdBy, UserId modifiedBy)
     {
         Require.NotNullOrEmpty(name);
+        Require.NotNullOrEmpty(email);
 
         return new Student(
             id: StudentId.MakeNew(),
             name: name,
+            email: Email.Make(email),
             createdBy: createdBy,
             createdOn: DateTime.Now,
             modifiedBy: modifiedBy,
