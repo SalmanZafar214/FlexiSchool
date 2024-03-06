@@ -7,4 +7,6 @@ public class CollectionSettings
     public string LectureTheaterCollectionName { get; init; } = null!;
 
     public string SubjectCollectionName { get; init; } = null!;
+
+    public string StudentCollectionName { get; init; } = null!;
 }

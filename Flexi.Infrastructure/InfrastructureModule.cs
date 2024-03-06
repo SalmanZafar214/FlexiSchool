@@ -3,11 +3,13 @@ using Flexi.Application.Subjects.Repository;
 using Flexi.Domain.Core.Aggregate;
 using Flexi.Domain.Core.Events;
 using Flexi.Domain.LectureTheaterAggregate.ValueObjects;
+using Flexi.Domain.StudentAggregate;
 using Flexi.Domain.SubjectAggregate;
 using Flexi.Domain.SubjectAggregate.ValueObjects;
 using Flexi.Infrastructure.LectureTheaters;
 using Flexi.Infrastructure.Mongo;
 using Flexi.Infrastructure.Students;
+using Flexi.Infrastructure.Students.EventManager;
 using Flexi.Infrastructure.Subjects;
 using Flexi.Infrastructure.Subjects.EventManager;
 using Microsoft.Extensions.Configuration;
@@ -29,9 +31,12 @@ public static class InfrastructureModule
 
         servicesCollection.AddSingleton<IMongoClient>(provider => new MongoClient(connectionString));
 
-        servicesCollection.AddTransient<IDomainEventHandler<Subject>, SubjectCreatedEventHandler>();
-        servicesCollection.AddTransient<IDomainEventHandler<Subject>, LectureAddedToSubjectEventHandler>();
-        servicesCollection.AddTransient<IDomainEventManager<Subject>, SubjectEventManager>();
+        servicesCollection.AddSingleton<IDomainEventHandler<Subject>, SubjectCreatedEventHandler>();
+        servicesCollection.AddSingleton<IDomainEventHandler<Subject>, LectureAddedToSubjectEventHandler>();
+        servicesCollection.AddSingleton<IDomainEventManager<Subject>, SubjectEventManager>();
+
+        servicesCollection.AddSingleton<IDomainEventManager<Student>, StudentEventManager>();
+        servicesCollection.AddSingleton<IDomainEventHandler<Student>, StudentEnrolledInSubjectEventHandler>();
 
         RegisterSerializers();
         RegisterClassMaps();
