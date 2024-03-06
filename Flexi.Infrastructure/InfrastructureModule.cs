@@ -68,6 +68,7 @@ public static class InfrastructureModule
         BsonSerializer.RegisterSerializer(new DayOfWeekSerializer());
         BsonSerializer.RegisterSerializer(new LectureIdSerializer());
         BsonSerializer.RegisterSerializer(new StudentIdSerializer());
+        BsonSerializer.RegisterSerializer(new SubjectIdSerializer());
     }
 
     private static void RegisterRepositories(IServiceCollection services)
