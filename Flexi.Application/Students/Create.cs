@@ -38,8 +38,13 @@ public class Create : EndpointBaseAsync
         CancellationToken cancellationToken = new())
     {
         var performedBy = UserId.Make();
-        var existingStudent = await studentRepository.GetByEmail(Email.Make(request.Email), cancellationToken) ??
-                              throw new NotFoundException($"Student with email {request.Email} already exist");
+        var existingStudent = await studentRepository.GetByEmail(Email.Make(request.Email), cancellationToken);
+
+        if (existingStudent is not null)
+        {
+            throw new AlreadyExistsException(existingStudent.Id.ToString(), nameof(Student), $"Student with email {request.Email} already exist");
+        }
+
         var student = Student.Make(request.Name, request.Email, performedBy, performedBy);
 
         await studentRepository.Upsert(student, cancellationToken);

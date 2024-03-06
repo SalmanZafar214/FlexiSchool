@@ -1,4 +1,5 @@
 ﻿using Flexi.Application.LectureTheaters.Repository;
+using Flexi.Application.Students.Repository;
 using Flexi.Application.Subjects.Repository;
 using Flexi.Domain.Core.Aggregate;
 using Flexi.Domain.Core.Events;
@@ -73,5 +74,6 @@ public static class InfrastructureModule
     {
         services.AddTransient<ILectureTheaterRepository, LectureTheaterRepository>();
         services.AddTransient<ISubjectRepository, SubjectRepository>();
+        services.AddTransient<IStudentRepository, StudentRepository>();
     }
 }
