@@ -1,5 +1,4 @@
 ﻿using Ardalis.ApiEndpoints;
-using Flexi.Application.LectureTheaters;
 using Flexi.Application.Students.Repository;
 using Flexi.Application.Subjects.Repository;
 using Flexi.Domain.Core.Exceptions;
@@ -10,21 +9,28 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
-using System.ComponentModel.DataAnnotations;
 
 namespace Flexi.Application.Students;
 
-public record CreateEnrollStudentRequest([Required] Guid StudentId, [Required] Guid SubjectId);
+public record CreateEnrollStudentRequest
+{
+    [FromRoute]
+    public Guid StudentId { get; init; }
 
+    [FromBody]
+    public Guid SubjectId { get; init; } = default!;
+}
+
+[Route(Endpoints.Students.Enroll)]
 public class EnrollStudent : EndpointBaseAsync
     .WithRequest<CreateEnrollStudentRequest>
     .WithActionResult
 {
-    private readonly ILogger<Create> logger;
+    private readonly ILogger<EnrollStudent> logger;
     private readonly IStudentRepository studentRepository;
     private readonly ISubjectRepository subjectRepository;
 
-    public EnrollStudent(ILogger<Create> logger,
+    public EnrollStudent(ILogger<EnrollStudent> logger,
         IStudentRepository studentRepository,
         ISubjectRepository subjectRepository)
     {
@@ -40,11 +46,9 @@ public class EnrollStudent : EndpointBaseAsync
         Tags = new[] { SwaggerTags.Students })]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public override async Task<ActionResult> HandleAsync(CreateEnrollStudentRequest request,
+    public override async Task<ActionResult> HandleAsync([FromRoute] CreateEnrollStudentRequest request,
         CancellationToken cancellationToken = new())
     {
-        var performedBy = UserId.Make();
-
         var existingStudent = await studentRepository.GetById(StudentId.Make(request.StudentId), cancellationToken) ??
                               throw new NotFoundException($"Student with id {request.StudentId} does not exist");
 
@@ -55,6 +59,5 @@ public class EnrollStudent : EndpointBaseAsync
         await studentRepository.Upsert(existingStudent, cancellationToken);
 
         return Ok();
-        ;
     }
 }

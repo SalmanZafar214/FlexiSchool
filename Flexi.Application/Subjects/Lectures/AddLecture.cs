@@ -1,7 +1,6 @@
 ﻿using Ardalis.ApiEndpoints;
 using Flexi.Application.Subjects.Repository;
 using Flexi.Domain.Core.Exceptions;
-using Flexi.Domain.Core.ValueObjects;
 using Flexi.Domain.LectureTheaterAggregate.ValueObjects;
 using Flexi.Domain.SubjectAggregate.ValueObjects;
 using Microsoft.AspNetCore.Http;
