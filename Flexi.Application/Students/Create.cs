@@ -17,10 +17,10 @@ public class Create : EndpointBaseAsync
     .WithRequest<CreateStudentRequest>
     .WithActionResult
 {
-    private readonly ILogger<EnrollStudent> logger;
+    private readonly ILogger<Create> logger;
     private readonly IStudentRepository studentRepository;
 
-    public Create(ILogger<EnrollStudent> logger,
+    public Create(ILogger<Create> logger,
         IStudentRepository studentRepository)
     {
         this.logger = logger;

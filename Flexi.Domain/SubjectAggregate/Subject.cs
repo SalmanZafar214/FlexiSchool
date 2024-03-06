@@ -3,10 +3,14 @@ using Flexi.Domain.Core.Exceptions;
 using Flexi.Domain.Core.Guard;
 using Flexi.Domain.Core.ValueObjects;
 using Flexi.Domain.StudentAggregate;
+using Flexi.Domain.StudentAggregate.Events;
+using Flexi.Domain.StudentAggregate.ValueObjects;
 using Flexi.Domain.SubjectAggregate.Events;
 using Flexi.Domain.SubjectAggregate.ValueObjects;
 
 namespace Flexi.Domain.SubjectAggregate;
+
+public record SubjectStudent(string Name, StudentId Id);
 
 public class Subject : AggregateRoot<SubjectId>
 {
@@ -14,7 +18,7 @@ public class Subject : AggregateRoot<SubjectId>
 
     public List<Lecture> Lectures { get; private set; }
 
-    public List<Student> StudentsEnrolled { get; set; }
+    public List<SubjectStudent> Students { get; private set; } = new();
 
     private Subject(SubjectId id,
         string name,
@@ -66,5 +70,34 @@ public class Subject : AggregateRoot<SubjectId>
         {
             Lectures.Remove(lecture);
         }
+    }
+
+    public void EnrollInSubject(Student student)
+    {
+        if (CheckStudentIsAlreadyEnrolled(student))
+        {
+            throw new AlreadyExistsException(Id.ToString(), nameof(Subject), "Student is already enrolled in the subject");
+        }
+
+        var totalWeeklyHours = CalculateTotalWeeklyLectureHours();
+        if (totalWeeklyHours > 10)
+        {
+            throw new InvalidOperationException("Student cannot enroll in subject, exceeds weekly lecture hours limit.");
+        }
+
+        Students.Add(new SubjectStudent(student.Name, student.Id));
+
+        AddEvent(new StudentEnrolledInSubject(student.Id, student.Name, Id, Name));
+    }
+
+    private int CalculateTotalWeeklyLectureHours()
+    {
+        return Lectures.Sum(lecture => lecture.Duration);
+    }
+
+    private bool CheckStudentIsAlreadyEnrolled(Student student)
+    {
+        var result = Students.Exists(s => s.Id.Equals(student.Id));
+        return result;
     }
 }

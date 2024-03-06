@@ -8,6 +8,7 @@ internal static class Endpoints
     {
         public const string Subject = "subject";
         public const string Lecture = $"subject/{{SubjectId}}/lecture";
+        public const string Enroll = $"subject/{{SubjectId}}/Enroll";
     }
 
     public static class Students

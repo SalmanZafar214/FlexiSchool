@@ -1,12 +1,12 @@
 ﻿using Flexi.Application.Subjects.Repository;
 using Flexi.Domain.Core.Events;
 using Flexi.Domain.LectureTheaterAggregate.ValueObjects;
+using Flexi.Domain.StudentAggregate.ValueObjects;
 using Flexi.Domain.SubjectAggregate;
 using Flexi.Domain.SubjectAggregate.ValueObjects;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using System;
+using System.Xml.Linq;
 using DayOfWeek = Flexi.Domain.SubjectAggregate.DayOfWeek;
 
 namespace Flexi.Infrastructure.Subjects;
@@ -34,9 +34,13 @@ public class SubjectRepository : ISubjectRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<List<Subject>> GetAll(int page, int limit, CancellationToken cancellationToken)
+    public async Task<List<Subject>> GetAll(StudentId? studentId, int page, int limit, CancellationToken cancellationToken)
     {
         var filter = Builders<Subject>.Filter.Empty;
+        if (studentId is not null)
+        {
+            filter = Builders<Subject>.Filter.Where(s => s.Students.Exists(st => st.Id.Equals(studentId)));
+        }
 
         var results = await subjectCollection
             .Find(filter, new FindOptions()).Skip(page * limit)

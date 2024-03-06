@@ -1,5 +1,6 @@
 ﻿using Ardalis.ApiEndpoints;
 using Flexi.Application.Subjects.Repository;
+using Flexi.Domain.StudentAggregate.ValueObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,6 +15,8 @@ public class GetAllRequest
 
     [FromQuery]
     public int Page { get; set; } = 0;
+
+    [FromQuery] public Guid? StudentId { get; set; }
 }
 
 [Route(Endpoints.Subjects.Subject)]
@@ -41,12 +44,17 @@ public class GetAll : EndpointBaseAsync
     public override async Task<ActionResult<IEnumerable<GetAllResponse>>> HandleAsync([FromRoute] GetAllRequest request,
         CancellationToken cancellationToken = new CancellationToken())
     {
-        var records = await subjectRepository.GetAll(request.Page, request.Limit, cancellationToken);
+        var records = await subjectRepository.GetAll(
+            request.StudentId.HasValue ? StudentId.Make(request.StudentId.Value) : null,
+            request.Page,
+            request.Limit,
+            cancellationToken
+        );
 
         return records.Select(r =>
             new GetAllResponse(r.Name,
                 r.CreatedOn,
-                r.Lectures?.Select(l => new LectureResponse(
+                r.Lectures.Select(l => new LectureResponse(
                     l.Id.Value,
                     l.DayOfWeek.Value,
                     l.TimeOfDay,
