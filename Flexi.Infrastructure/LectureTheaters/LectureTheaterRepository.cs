@@ -1,5 +1,6 @@
 ﻿using Flexi.Application.LectureTheaters.Repository;
 using Flexi.Domain.LectureTheaterAggregate;
+using Flexi.Domain.LectureTheaterAggregate.ValueObjects;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -19,6 +20,15 @@ public class LectureTheaterRepository : ILectureTheaterRepository
     public async Task<LectureTheater> GetByName(string name, CancellationToken cancellationToken)
     {
         var filter = Builders<LectureTheater>.Filter.Eq(p => p.Name, name);
+
+        return await lectureTheaterCollection
+            .Find(filter)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<LectureTheater> GetById(LectureTheaterId lectureTheaterId, CancellationToken cancellationToken)
+    {
+        var filter = Builders<LectureTheater>.Filter.Eq(p => p.Id, lectureTheaterId);
 
         return await lectureTheaterCollection
             .Find(filter)

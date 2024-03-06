@@ -1,4 +1,5 @@
 ﻿using Ardalis.ApiEndpoints;
+using Flexi.Application.LectureTheaters.Repository;
 using Flexi.Application.Subjects.Repository;
 using Flexi.Domain.Core.Exceptions;
 using Flexi.Domain.LectureTheaterAggregate.ValueObjects;
@@ -28,11 +29,13 @@ public class AddLecture : EndpointBaseAsync
 {
     private readonly ILogger<Create> logger;
     private readonly ISubjectRepository subjectRepository;
+    private readonly ILectureTheaterRepository lectureTheaterRepository;
 
-    public AddLecture(ILogger<Create> logger, ISubjectRepository subjectRepository)
+    public AddLecture(ILogger<Create> logger, ISubjectRepository subjectRepository, ILectureTheaterRepository lectureTheaterRepository)
     {
         this.logger = logger;
         this.subjectRepository = subjectRepository;
+        this.lectureTheaterRepository = lectureTheaterRepository;
     }
 
     [HttpPost]
@@ -50,6 +53,19 @@ public class AddLecture : EndpointBaseAsync
 
         var existingSubject = await subjectRepository.GetById(subjectId, cancellationToken) ??
                               throw new NotFoundException($"Subject with id '{request.SubjectId} doe not  exists");
+
+        var theaterId = LectureTheaterId.Make(request.Body.TheaterId);
+        var dayOfWeek = Domain.SubjectAggregate.DayOfWeek.FromName(request.Body.Day);
+
+        var existingLectureTheater = await lectureTheaterRepository.GetById(theaterId, cancellationToken) ??
+                                     throw new NotFoundException($"LectureTheater with id '{request.Body.TheaterId} doe not  exists");
+
+        var lectureCount = await subjectRepository.GetLectureCount(theaterId, dayOfWeek, cancellationToken);
+
+        if (lectureCount > existingLectureTheater.Capacity)
+        {
+            throw new InvalidOperationException("Capacity exceeded");
+        }
 
         var lecture = new Domain.SubjectAggregate.Lecture(LectureId.Make(),
                 LectureTheaterId.Make(request.Body.TheaterId),

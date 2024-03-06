@@ -55,7 +55,6 @@ public class Subject : AggregateRoot<SubjectId>
             throw new AlreadyExistsException(lecture.DayOfWeek.ToString(), nameof(Subject), $"Lecture already exists on Same day");
         }
 
-
         Lectures.Add(lecture);
 
         AddEvent(new LectureAddedToSubject(lecture.Id, Name, Id));

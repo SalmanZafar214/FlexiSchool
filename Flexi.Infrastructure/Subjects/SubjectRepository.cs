@@ -1,9 +1,13 @@
 ﻿using Flexi.Application.Subjects.Repository;
 using Flexi.Domain.Core.Events;
+using Flexi.Domain.LectureTheaterAggregate.ValueObjects;
 using Flexi.Domain.SubjectAggregate;
 using Flexi.Domain.SubjectAggregate.ValueObjects;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
+using System;
+using DayOfWeek = Flexi.Domain.SubjectAggregate.DayOfWeek;
 
 namespace Flexi.Infrastructure.Subjects;
 
@@ -60,5 +64,19 @@ public class SubjectRepository : ISubjectRepository
             cancellationToken: cancellationToken);
 
         await subjectEventManager.ProcessEvents(subject);
+    }
+
+    public async Task<int> GetLectureCount(LectureTheaterId theaterId, DayOfWeek dayOfWeek, CancellationToken cancellationToken)
+    {
+        var filter = Builders<Subject>.Filter.Where(s => s.Lectures.Any(l => l.TheaterId == theaterId && l.DayOfWeek == dayOfWeek));
+
+        var subjectsWithMatchingLectures = await subjectCollection
+            .Find(filter)
+            .ToListAsync(cancellationToken);
+
+        var lectures = subjectsWithMatchingLectures.SelectMany(s => s.Lectures);
+        var totalDuration = lectures.Sum(l => l.Duration);
+
+        return totalDuration;
     }
 }

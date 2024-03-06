@@ -24,7 +24,6 @@ public record Lecture(Guid TheaterId, string Day, DateTime Time, int Duration);
 
 public record CreateSubjectRequestBody([Required] string Name, [Required] List<Lecture> Lectures);
 
-
 [Route(Endpoints.Subjects.Subject)]
 public class Create : EndpointBaseAsync
         .WithRequest<CreateSubjectRequest>

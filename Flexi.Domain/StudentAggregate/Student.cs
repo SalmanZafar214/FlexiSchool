@@ -1,4 +1,5 @@
 ﻿using Flexi.Domain.Core.Aggregate;
+using Flexi.Domain.Core.Exceptions;
 using Flexi.Domain.Core.Guard;
 using Flexi.Domain.Core.ValueObjects;
 using Flexi.Domain.StudentAggregate.Events;
@@ -46,6 +47,11 @@ public class Student : AggregateRoot<StudentId>
 
     public void EnrollInSubject(Subject subject)
     {
+        if (CheckStudentIsAlreadyEnrolled(subject))
+        {
+            throw new AlreadyExistsException(subject.Id.ToString(), nameof(Subject), "Student is already enrolled in the subject");
+        }
+
         var totalWeeklyHours = CalculateTotalWeeklyLectureHours(subject);
         if (totalWeeklyHours > 10)
         {
@@ -60,5 +66,11 @@ public class Student : AggregateRoot<StudentId>
     private int CalculateTotalWeeklyLectureHours(Subject subject)
     {
         return subject.Lectures.Sum(lecture => lecture.Duration);
+    }
+
+    private bool CheckStudentIsAlreadyEnrolled(Subject subject)
+    {
+        var result = Subjects.Exists(s => s.Id.Equals(subject.Id));
+        return result;
     }
 }
